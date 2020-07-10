@@ -52,6 +52,7 @@ if ! type wget &>/dev/null; then
     apt-get -y install wget
 fi
 
+
 WORKSPACE=/root/project
 
 # Increase nodejs stack size
@@ -73,6 +74,19 @@ cd "$WORKSPACE"/boost_1_70_0
 ln -sf "$WORKSPACE"/boost_1_70_0_install/lib/* /emsdk_portable/emscripten/sdk/system/lib
 ln -sf "$WORKSPACE"/boost_1_70_0_install/include/* /emsdk_portable/emscripten/sdk/system/include
 echo -en 'travis_fold:end:compiling_boost\\r'
+
+
+# GmSSL
+echo -en 'travis_fold:start:compiling_gmssl\\r'
+test -e "$WORKSPACE"/GmSSL/libcrypto.so || (
+cd "$WORKSPACE"/GmSSL
+emconfigure ./config -no-asm no-tests
+sed -i 's|^CROSS_COMPILE.*$|CROSS_COMPILE=|g' Makefile
+emmake make
+)
+ln -sf "$WORKSPACE"/GmSSL/*.so /emsdk_portable/emscripten/sdk/system/lib
+ln -sf "$WORKSPACE"/GmSSL/include/* /emsdk_portable/emscripten/sdk/system/include
+echo -en 'travis_fold:end:compiling_gmssl\\r'
 
 echo -en 'travis_fold:start:install_cmake.sh\\r'
 source $WORKSPACE/scripts/install_cmake.sh

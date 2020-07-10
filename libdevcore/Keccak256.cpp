@@ -25,9 +25,21 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <openssl/evp.h>
+
+// #ifndef CRYPTO_MODE_GM
+// #define CRYPTO_MODE_GM
+// #endif
+
+static int s_crypto = 0;
+
+#ifdef CRYPTO_MODE_GM
+	s_crypto = CRYPTO_GM;
+#endif
 
 using namespace std;
 using namespace dev;
+
 
 namespace dev
 {
@@ -181,6 +193,40 @@ h256 keccak256(bytesConstRef _input)
 	// 200 - (256 / 4) is the "rate"
 	hash(output.data(), output.size, _input.data(), _input.size(), 200 - (256 / 4), 0x01);
 	return output;
+}
+
+h256 sm3(std::string const& _input)
+{
+	h256 output;
+	EVP_MD_CTX *mdctx = NULL;
+	unsigned char dgst[EVP_MAX_MD_SIZE];
+	unsigned int dgstlen = (unsigned int)sizeof(dgst);
+
+	if(!(mdctx = EVP_MD_CTX_new()))
+		return output;
+
+	if(!EVP_DigestInit_ex(mdctx, EVP_sm3(), NULL))
+		goto end;
+
+	if(!EVP_DigestUpdate(mdctx, _input.c_str(), _input.size()))
+		goto end;
+
+	EVP_DigestFinal_ex(mdctx, output.data(), &dgstlen);
+
+
+end:
+	EVP_MD_CTX_free(mdctx);
+	return output;
+}
+
+void setCryptoMode(int cryptoMode)
+{
+	s_crypto = cryptoMode;
+}
+
+bool isGmMode()
+{
+	return s_crypto == CRYPTO_GM;
 }
 
 }

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -e
 
-ROOTDIR="$(dirname "$0")/.."
-BUILDDIR="${ROOTDIR}/build"
+export ROOTDIR="$(dirname "$0")/.."
+export BUILDDIR="${ROOTDIR}/build"
 
 if [[ $# -eq 0 ]]; then
     BUILD_TYPE=Release
@@ -15,6 +15,9 @@ if [[ "$(git tag --points-at HEAD 2>/dev/null)" == v* ]]; then
 fi
 
 mkdir -p "${BUILDDIR}"
+
+"${ROOTDIR}/scripts/build-gmssl.sh" $params;
+
 cd "${BUILDDIR}"
 
 cmake .. -DCMAKE_BUILD_TYPE="$BUILD_TYPE" "${@:2}"

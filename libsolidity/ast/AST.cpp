@@ -207,8 +207,18 @@ vector<pair<FixedHash<4>, FunctionTypePointer>> const& ContractDefinition::inter
 				if (signaturesSeen.count(functionSignature) == 0)
 				{
 					signaturesSeen.insert(functionSignature);
-					FixedHash<4> hash(dev::keccak256(functionSignature));
-					printf("hash: %s\n", hash.hex().c_str());
+
+					h256 sigature;
+					if (dev::isGmMode()) {
+						sigature = dev::sm3(functionSignature);
+						printf("GM functionSignature: %s, hash: %s\n", functionSignature.c_str(), sigature.hex().c_str());
+					}
+					else {
+						sigature = dev::keccak256(functionSignature);
+						printf("functionSignature: %s, hash: %s\n", functionSignature.c_str(), sigature.hex().c_str());
+					}
+					FixedHash<4> hash(sigature);
+
 					m_interfaceFunctionList->emplace_back(hash, fun);
 				}
 			}

@@ -31,7 +31,13 @@ set -ev
 
 SCRIPT_DIR="$(realpath $(dirname $0))"
 
+if ! type unzip &>/dev/null; then
+    apt-get update
+    apt-get -y install unzip
+fi
+
 echo -en 'travis_fold:start:installing_dependencies\\r'
+
 test -e boost_1_70_0_install/include/boost/version.hpp || (
 rm -rf boost_1_70_0
 rm -f boost.tar.gz
@@ -44,6 +50,19 @@ cd boost_1_70_0
 ./bootstrap.sh
 cp "${SCRIPT_DIR}/emscripten.jam" .
 echo "using emscripten : : em++ ;" >> project-config.jam
+cd ..
+)
+
+
+test -e GmSSL/include/openssl/evp.h || (
+rm -rf GmSSL
+rm -f GmSSL.zip
+wget -q 'https://github.com/guanzhi/GmSSL/archive/master.zip' -O GmSSL.zip
+unzip -a GmSSL.zip
+rm GmSSL.zip
+mv GmSSL-master GmSSL
+cd GmSSL
 )
 cd ..
+
 echo -en 'travis_fold:end:installing_dependencies\\r'

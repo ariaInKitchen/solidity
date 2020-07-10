@@ -40,6 +40,14 @@ include(EthCompilerSettings)
 # Include utils
 include(EthUtils)
 
+# set gm crypto property
+add_library(crypto UNKNOWN IMPORTED)
+set(GMSSL_DIR "${CMAKE_SOURCE_DIR}/GmSSL")
+set(CRYPTO_LIBRARY "${GMSSL_DIR}/${CMAKE_SHARED_LIBRARY_PREFIX}crypto${CMAKE_SHARED_LIBRARY_SUFFIX}")
+set_property(TARGET crypto PROPERTY IMPORTED_LOCATION ${CRYPTO_LIBRARY})
+set_property(TARGET crypto PROPERTY INTERFACE_SYSTEM_INCLUDE_DIRECTORIES "${GMSSL_DIR}/include")
+set_property(TARGET crypto PROPERTY INTERFACE_INCLUDE_DIRECTORIES "${GMSSL_DIR}/include")
+
 # Create license.h from LICENSE.txt and template
 # Converting to char array is required due to MSVC's string size limit.
 file(READ ${CMAKE_SOURCE_DIR}/LICENSE.txt LICENSE_TEXT HEX)

@@ -24,6 +24,9 @@
 #include <boost/exception/all.hpp>
 #include <clocale>
 #include <iostream>
+#include <openssl/conf.h>
+#include <openssl/evp.h>
+#include <openssl/err.h>
 
 using namespace std;
 
@@ -50,14 +53,41 @@ static void setDefaultOrCLocale()
 #endif
 }
 
+static void initGmssl() {
+    /* Load the human readable error strings for libcrypto */
+    ERR_load_crypto_strings();
+
+    /* Load all digest and cipher algorithms */
+    OpenSSL_add_all_algorithms();
+
+    /* Load config file, and other important initialisation */
+    // OPENSSL_config(NULL);
+}
+
+static void cleanGmssl() {
+   /* Removes all digests and ciphers */
+    EVP_cleanup();
+
+    /* if you omit the next, a small leak may be left when you make use of the BIO (low level API) for e.g. base64 transformations */
+    CRYPTO_cleanup_all_ex_data();
+
+    /* Remove error strings */
+    ERR_free_strings();
+}
+
 int main(int argc, char** argv)
 {
 	setDefaultOrCLocale();
+	initGmssl();
 	dev::solidity::CommandLineInterface cli;
-	if (!cli.parseArguments(argc, argv))
+	if (!cli.parseArguments(argc, argv)) {
+		// cleanGmssl();
 		return 1;
-	if (!cli.processInput())
+	}
+	if (!cli.processInput()) {
+		cleanGmssl();
 		return 1;
+	}
 	bool success = false;
 	try
 	{
@@ -69,5 +99,6 @@ int main(int argc, char** argv)
 		success = false;
 	}
 
+	cleanGmssl();
 	return success ? 0 : 1;
 }

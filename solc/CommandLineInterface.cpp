@@ -152,6 +152,7 @@ static string const g_strIgnoreMissingFiles = "ignore-missing";
 static string const g_strColor = "color";
 static string const g_strNoColor = "no-color";
 static string const g_strNewReporter = "new-reporter";
+static string const g_strCryptoMode = "cryptomode";
 
 static string const g_argAbi = g_strAbi;
 static string const g_argPrettyJson = g_strPrettyJson;
@@ -193,6 +194,7 @@ static string const g_argIgnoreMissingFiles = g_strIgnoreMissingFiles;
 static string const g_argColor = g_strColor;
 static string const g_argNoColor = g_strNoColor;
 static string const g_argNewReporter = g_strNewReporter;
+static string const g_argCryptoMode = g_strCryptoMode;
 
 /// Possible arguments to for --combined-json
 static set<string> const g_combinedJsonArgs
@@ -748,7 +750,11 @@ Allowed options)",
 		(g_argSignatureHashes.c_str(), "Function signature hashes of the contracts.")
 		(g_argNatspecUser.c_str(), "Natspec user documentation of all contracts.")
 		(g_argNatspecDev.c_str(), "Natspec developer documentation of all contracts.")
-		(g_argMetadata.c_str(), "Combined Metadata JSON whose Swarm hash is stored on-chain.");
+		(g_argMetadata.c_str(), "Combined Metadata JSON whose Swarm hash is stored on-chain.")
+		(
+			g_argCryptoMode.c_str(),
+			po::value<string>()->value_name("gm"),
+			"Set crypto mode gm.");
 	desc.add(outputComponents);
 
 	po::options_description allOptions = desc;
@@ -856,6 +862,14 @@ bool CommandLineInterface::processInput()
 			return ReadCallback::Result{false, "Unknown exception in read callback."};
 		}
 	};
+
+	if (m_args.count(g_argCryptoMode)) {
+		string input = m_args.at(g_argCryptoMode).as<string>();
+			sout() << "set crypto mode " << input << endl;
+		if (!input.compare("gm")) {
+			dev::setCryptoMode(CRYPTO_GM);
+		}
+	}
 
 	if (m_args.count(g_argAllowPaths))
 	{
