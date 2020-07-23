@@ -27,14 +27,14 @@
 #include <cstring>
 #include <openssl/evp.h>
 
-// #ifndef CRYPTO_MODE_GM
-// #define CRYPTO_MODE_GM
-// #endif
-
-static int s_crypto = 0;
+#ifndef CRYPTO_MODE_GM
+#define CRYPTO_MODE_GM
+#endif
 
 #ifdef CRYPTO_MODE_GM
-	s_crypto = CRYPTO_GM;
+	static int s_crypto = CRYPTO_GM;
+#else
+	static int s_crypto = 0;
 #endif
 
 using namespace std;

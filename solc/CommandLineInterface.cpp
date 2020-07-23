@@ -865,7 +865,7 @@ bool CommandLineInterface::processInput()
 
 	if (m_args.count(g_argCryptoMode)) {
 		string input = m_args.at(g_argCryptoMode).as<string>();
-			sout() << "set crypto mode " << input << endl;
+		printf("set crypto mode %s\n", input.c_str());
 		if (!input.compare("gm")) {
 			dev::setCryptoMode(CRYPTO_GM);
 		}

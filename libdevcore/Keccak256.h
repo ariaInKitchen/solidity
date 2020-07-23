@@ -35,19 +35,29 @@ namespace dev
 /// Calculate Keccak-256 hash of the given input, returning as a 256-bit hash.
 h256 keccak256(bytesConstRef _input);
 
+void setCryptoMode(int cryptoMode);
+
+bool isGmMode();
+
+h256 sm3(std::string const& _input);
+
 /// Calculate Keccak-256 hash of the given input, returning as a 256-bit hash.
 inline h256 keccak256(bytes const& _input) { return keccak256(bytesConstRef(&_input)); }
 
 /// Calculate Keccak-256 hash of the given input (presented as a binary-filled string), returning as a 256-bit hash.
-inline h256 keccak256(std::string const& _input) { return keccak256(bytesConstRef(_input)); }
-
-h256 sm3(std::string const& _input);
+inline h256 keccak256(std::string const& _input) {
+	return keccak256(bytesConstRef(_input));
+}
 
 /// Calculate Keccak-256 hash of the given input (presented as a FixedHash), returns a 256-bit hash.
 template<unsigned N> inline h256 keccak256(FixedHash<N> const& _input) { return keccak256(_input.ref()); }
 
-void setCryptoMode(int cryptoMode);
+inline h256 keccak256ByMode(std::string const& _input) {
+	if (isGmMode()) {
+		return sm3(_input);
+	}
 
-bool isGmMode();
+	return keccak256(bytesConstRef(_input));
+}
 
 }
