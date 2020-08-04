@@ -3150,7 +3150,7 @@ string FunctionType::externalSignature() const
 
 u256 FunctionType::externalIdentifier() const
 {
-	return FixedHash<4>::Arith(FixedHash<4>(dev::keccak256ByMode(externalSignature())));
+	return FixedHash<4>::Arith(FixedHash<4>(dev::keccak256(externalSignature())));
 }
 
 bool FunctionType::isPure() const

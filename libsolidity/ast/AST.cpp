@@ -207,7 +207,7 @@ vector<pair<FixedHash<4>, FunctionTypePointer>> const& ContractDefinition::inter
 				if (signaturesSeen.count(functionSignature) == 0)
 				{
 					signaturesSeen.insert(functionSignature);
-					FixedHash<4> hash(dev::keccak256ByMode(functionSignature));
+					FixedHash<4> hash(dev::keccak256(functionSignature));
 					m_interfaceFunctionList->emplace_back(hash, fun);
 				}
 			}
