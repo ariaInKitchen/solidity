@@ -601,6 +601,7 @@ void SMTEncoder::endVisit(FunctionCall const& _funCall)
 	case FunctionType::Kind::BlockHash:
 	case FunctionType::Kind::AddMod:
 	case FunctionType::Kind::MulMod:
+	case FunctionType::Kind::ElaVerify:
 		break;
 	case FunctionType::Kind::Send:
 	case FunctionType::Kind::Transfer:

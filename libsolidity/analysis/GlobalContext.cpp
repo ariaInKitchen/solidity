@@ -75,6 +75,7 @@ inline vector<shared_ptr<MagicVariableDeclaration const>> constructMagicVariable
 			false,
 			StateMutability::Pure
 		)),
+		magicVarDecl("elaverify", TypeProvider::function(strings{"string memory", "string memory", "uint256", "bytes memory"}, strings{"bool"}, FunctionType::Kind::ElaVerify, false, StateMutability::Pure)),
 	};
 }
 

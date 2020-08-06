@@ -1023,7 +1023,8 @@ public:
 		ABIEncodeWithSignature,
 		ABIDecode,
 		GasLeft, ///< gasleft()
-		MetaType ///< type(...)
+		MetaType, ///< type(...)
+		ElaVerify ///< CALL to special contract for elaverify
 	};
 
 	/// Creates the type of a function.

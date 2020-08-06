@@ -365,6 +365,7 @@ void BMC::endVisit(FunctionCall const& _funCall)
 	case FunctionType::Kind::BlockHash:
 	case FunctionType::Kind::AddMod:
 	case FunctionType::Kind::MulMod:
+	case FunctionType::Kind::ElaVerify:
 		SMTEncoder::endVisit(_funCall);
 		abstractFunctionCall(_funCall);
 		break;
