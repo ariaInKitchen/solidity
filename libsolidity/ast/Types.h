@@ -1024,7 +1024,8 @@ public:
 		ABIDecode,
 		GasLeft, ///< gasleft()
 		MetaType, ///< type(...)
-		ElaVerify ///< CALL to special contract for elaverify
+		ElaVerify, ///< CALL to special contract for elaverify
+		ElaGetAddress ///< CALL to special contract for elagetaddress
 	};
 
 	/// Creates the type of a function.

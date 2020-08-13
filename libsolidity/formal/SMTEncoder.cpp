@@ -602,6 +602,7 @@ void SMTEncoder::endVisit(FunctionCall const& _funCall)
 	case FunctionType::Kind::AddMod:
 	case FunctionType::Kind::MulMod:
 	case FunctionType::Kind::ElaVerify:
+	case FunctionType::Kind::ElaGetAddress:
 		break;
 	case FunctionType::Kind::Send:
 	case FunctionType::Kind::Transfer:

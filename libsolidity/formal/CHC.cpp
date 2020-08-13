@@ -432,6 +432,7 @@ void CHC::endVisit(FunctionCall const& _funCall)
 	case FunctionType::Kind::AddMod:
 	case FunctionType::Kind::MulMod:
 	case FunctionType::Kind::ElaVerify:
+	case FunctionType::Kind::ElaGetAddress:
 		SMTEncoder::endVisit(_funCall);
 		unknownFunctionCall(_funCall);
 		break;
